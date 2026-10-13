@@ -1,0 +1,16 @@
+node_modules
+.git
+.openai
+.env
+.env.*
+!.env.example
+supabase/.env
+supabase/.env.*
+!supabase/.env.example
+.artifacts
+.sites-runtime
+dist
+docs
+tests
+*.zip
+*.tar.gz

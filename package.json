@@ -1,0 +1,26 @@
+{
+  "name": "parlonsmoi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm test && npm run build",
+    "verify:live": "node scripts/verify-live.mjs",
+    "source": "node scripts/export-source.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.117.3"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.9",
+    "@fontsource/oswald": "5.3.0",
+    "@tailwindcss/cli": "4.3.3",
+    "esbuild": "0.28.2",
+    "linkedom": "0.18.13",
+    "tailwindcss": "4.3.3"
+  }
+}
