@@ -54,3 +54,12 @@ A real challenge completion and registration have NOT yet been verified; these
 checks do not validate the Turnstile secret against a genuine successful token.
 Ask the owner to submit through the hosted form, then check the database count
 without displaying personal information. A public launch and privacy review remain.
+
+## 15 October — public aggregate count
+
+Vercel site https://parlonmoiwaitlist.vercel.app has working signup (owner reported).
+Migration 20261015071852_add_waitlist_count and waitlist-stats version 1 are deployed.
+A live request from the Vercel origin returned 200 with exactly count and updated_at;
+count was 2 at verification. Direct anonymous count RPC returned 401. Server count
+execution passed and visitor execution/read privileges remained denied. New frontend
+is packaged for Vercel but has not been deployed to the owner's Vercel account.

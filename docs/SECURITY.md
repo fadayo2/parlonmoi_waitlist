@@ -89,3 +89,20 @@ prove hosted gateway configuration, real Turnstile, secret configuration, HTTP
 headers, browser accessibility, distributed concurrency or live data privacy.
 Run the live checklist after deployment. No registration data was accessed in
 the owner's project during this build.
+
+## Aggregate endpoint
+
+Browser → waitlist-stats → get_waitlist_count() returns a bigint count only.
+The database RPC is SECURITY INVOKER with empty search_path. Execute is explicitly
+revoked from PUBLIC, anon and authenticated, and granted only to service_role.
+It counts the already permitted email column; no new table privileges are granted.
+It accepts no email, name, filter or identity parameters. Exact totals reveal
+aggregate registration activity; do not present them as anonymity guarantees.
+The Edge Function emits only count/updated_at, coalesces concurrent requests and
+caches successful results for 30 seconds per running instance. This reduces repeated
+DB reads but is not a global rate limit or denial-of-service protection. Requests
+are read-only and use the existing exact-origin CORS allowlist. CORS is not identity
+authentication. Error bodies contain no database internals or registration details.
+The SQL permissions, live 200 response shape and denied anonymous RPC were verified.
+The security advisor retained only the two expected informational no-policy notices
+for intentionally private tables; no new warnings were returned.

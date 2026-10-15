@@ -64,3 +64,13 @@ After the owner saved server settings, all four `npm run verify:live` checks
 passed. OPTIONS preflight returned 204 and the exact allowed website origin.
 The earlier configuration-unavailable response is resolved. Genuine Turnstile
 completion, successful browser registration, and duplicate testing remain pending.
+
+## Community count checks
+
+29 tests now pass: aggregate permissions/response shape, read coalescing/cache,
+error paths, real zero/singular states, duplicates do not increment locally, stale
+counts are labelled, initial errors never show fake zero, and reduced-motion causes
+no scroll animation frames. Live stats response shape and direct RPC denial passed.
+After deployment, check the section at 320px/390px/tablet/desktop, keyboard retry,
+reduced-motion, unavailable endpoint, successful signup and refresh within 90 seconds.
+No visual browser QA was available during this update.

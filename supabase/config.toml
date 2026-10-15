@@ -4,3 +4,8 @@ project_id = "parlonsmoi"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/join-waitlist/index.ts"
+
+[functions.waitlist-stats]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/waitlist-stats/index.ts"

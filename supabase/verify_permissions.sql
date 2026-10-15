@@ -42,3 +42,18 @@ where routine_schema='public' and routine_name='register_waitlist';
 select grantee, column_name, privilege_type from information_schema.column_privileges
 where table_schema='parlonsmoi_private' and table_name='waitlist'
 order by grantee, column_name, privilege_type;
+
+-- Aggregate endpoint: only the server may invoke the count RPC.
+do $$
+begin
+  if has_function_privilege('anon', 'public.get_waitlist_count()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.get_waitlist_count()', 'EXECUTE') then
+    raise exception 'FAIL: visitor role can invoke server count RPC';
+  end if;
+  if not has_function_privilege('service_role', 'public.get_waitlist_count()', 'EXECUTE') then
+    raise exception 'FAIL: server cannot invoke count RPC';
+  end if;
+  if (select prosecdef from pg_proc where oid = 'public.get_waitlist_count()'::regprocedure) then
+    raise exception 'FAIL: count RPC must not elevate privileges';
+  end if;
+end $$;

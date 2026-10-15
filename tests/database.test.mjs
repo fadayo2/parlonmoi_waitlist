@@ -11,6 +11,7 @@ test('real PostgreSQL: schema constraints, duplicate handling, permissions and q
       alter default privileges grant all on tables to anon, authenticated, service_role;
       alter default privileges grant execute on functions to anon, authenticated, service_role;`);
     await db.exec(await readFile('supabase/migrations/20261012172205_create_waitlist.sql', 'utf8'));
+    await db.exec(await readFile('supabase/migrations/20261015071852_add_waitlist_count.sql', 'utf8'));
     await db.exec(await readFile('supabase/verify_permissions.sql', 'utf8'));
     const rpc = async (email, hash = 'a'.repeat(64), extras = {}) => {
       await db.exec('set role service_role');
@@ -26,6 +27,16 @@ test('real PostgreSQL: schema constraints, duplicate handling, permissions and q
       assert.equal(rows.length, 1); assert.equal(rows[0].full_name, 'Aïcha Bello');
       assert.equal(rows[0].email, 'aicha@example.com'); assert.equal(rows[0].country, 'NG');
       assert.match(rows[0].id, /^[0-9a-f-]{36}$/); assert.ok(rows[0].created_at);
+    });
+    await t.test('count RPC returns only the aggregate to the server and stays inaccessible to visitors', async () => {
+      await db.exec('set role service_role');
+      try { assert.equal(Number((await db.query('select public.get_waitlist_count() as total')).rows[0].total), 1); }
+      finally { await db.exec('reset role'); }
+      for (const role of ['anon','authenticated']) {
+        await db.exec(`set role ${role}`);
+        try { await assert.rejects(db.query('select public.get_waitlist_count()'), /permission denied/); }
+        finally { await db.exec('reset role'); }
+      }
     });
     await t.test('database rejects malformed data and enforces uniqueness independently', async () => {
       await assert.rejects(db.query(`insert into parlonsmoi_private.waitlist(full_name,email,country,french_level) values ('Another User',' AICHA@EXAMPLE.COM ','NG','A1')`), /duplicate key/);

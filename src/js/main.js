@@ -1,6 +1,7 @@
 import { validateFields } from '../../supabase/functions/_shared/validation.js';
 import { createWaitlistClient } from './supabase.js';
 import { loadTurnstile } from './turnstile.js';
+import { initCommunity, initCommunityMotion } from './community.js';
 
 // Build-time public values only; see scripts/build.mjs.
 const config = __PUBLIC_CONFIG__;
@@ -97,6 +98,7 @@ export async function initSignup(settings = config, dependencies = {}) {
     try {
       await submit({ ...data, website: values.website ?? '', turnstile_token: token });
       complete = true;
+      document.dispatchEvent(new window.Event('parlonsmoi:registered'));
       form.reset();
       if (turnstile && widgetId !== undefined) turnstile.remove(widgetId);
       document.querySelector('#signup-content').hidden = true;
@@ -137,3 +139,6 @@ export async function initSignup(settings = config, dependencies = {}) {
 initNavigation();
 initContact();
 void initSignup();
+
+initCommunity(config);
+initCommunityMotion();

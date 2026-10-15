@@ -34,3 +34,13 @@ website is in dist for Vercel. Edit templates in src/pages and run npm run build
 to update both copies. Do not edit the generated root pages directly.
 Use npm run preview to test JavaScript and signup over HTTP; double-clicking
 HTML is not a reliable way to run JavaScript modules or Turnstile.
+
+## Live community section — 15 October 2026
+
+The landing page now includes an aggregate waitlist counter with an ENSEMBLE
+parallax background, loading/error states and reduced-motion support. Source:
+src/js/community.js, src/pages/index.html, src/css/styles.css. No public names or
+fake participant avatars are used. The backend returns only count and updated_at.
+Both real database migrations and both Edge Functions have already been deployed.
+The frontend update needs redeployment to the existing Vercel project.
+29 tests passed; live aggregate API returned count 2 when checked (not a fixed value).

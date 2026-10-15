@@ -10,12 +10,18 @@ const databaseOnly = process.argv.includes('--database-only');
 if (!base || !key?.startsWith('sb_publishable_') || !origin) throw new Error('Fill in the public values in .env first. This script never needs a secret key.');
 const headers = { apikey: key, 'Content-Type': 'application/json', Origin: origin };
 const checks = [
+  ['anonymous count RPC', `${base}/rest/v1/rpc/get_waitlist_count`, { method: 'POST', headers, body: '{}' }],
   ['anonymous private-schema read', `${base}/rest/v1/waitlist?select=id&limit=1`, { headers: { ...headers, 'Accept-Profile': 'parlonsmoi_private' } }],
   ['anonymous table discovery', `${base}/rest/v1/waitlist?select=id&limit=1`, { headers }],
   ['anonymous direct RPC', `${base}/rest/v1/rpc/register_waitlist`, { method: 'POST', headers, body: JSON.stringify({ p_full_name: 'Permission Test', p_email: 'permission-test@example.invalid', p_country: 'NG', p_french_level: 'A1', p_email_hash: '0'.repeat(64) }) }],
   ['signup without verification', `${base}/functions/v1/join-waitlist`, { method: 'POST', headers, body: JSON.stringify({ full_name: 'Permission Test', email: 'permission-test@example.invalid', country: 'NG', french_level: 'A1' }) }],
 ];
 let failed = false;
+const statsResponse = await fetch(`${base}/functions/v1/waitlist-stats`, { headers, signal: AbortSignal.timeout(15000) });
+const stats = await statsResponse.json().catch(() => ({}));
+const statsPass = statsResponse.status === 200 && Number.isSafeInteger(stats.count) && stats.count >= 0 && Object.keys(stats).sort().join(',') === 'count,updated_at';
+console.log(`${statsPass ? 'PASS' : 'FAIL'} aggregate endpoint: HTTP ${statsResponse.status}`);
+if (!statsPass) failed = true;
 for (const [name, url, options] of checks) {
   if (databaseOnly && name === 'signup without verification') continue;
   const response = await fetch(url, { ...options, signal: AbortSignal.timeout(15000) });

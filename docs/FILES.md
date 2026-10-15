@@ -31,6 +31,7 @@ scripts/export-source.mjs
 scripts/preview.mjs
 scripts/verify-live.mjs
 src/css/styles.css
+src/js/community.js
 src/js/main.js
 src/js/supabase.js
 src/js/turnstile.js
@@ -39,11 +40,15 @@ src/pages/index.html
 src/pages/privacy.html
 supabase/.env.example
 supabase/config.toml
+supabase/functions/_shared/stats-handler.js
 supabase/functions/_shared/validation.js
 supabase/functions/_shared/waitlist-handler.js
 supabase/functions/join-waitlist/index.ts
+supabase/functions/waitlist-stats/index.ts
 supabase/migrations/20261012172205_create_waitlist.sql
+supabase/migrations/20261015071852_add_waitlist_count.sql
 supabase/verify_permissions.sql
+tests/community.test.mjs
 tests/database.test.mjs
 tests/handler.test.mjs
 tests/ui.test.mjs

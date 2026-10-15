@@ -1,3 +1,35 @@
+# Update — live waitlist count (15 October 2026)
+
+The new section is ready in this ZIP. Replace the project files in your existing
+Vercel repository/folder and deploy again using the same project. Keep the existing
+Vercel URL and environment settings. No new keys or hostname changes are needed.
+
+The backend work has ALREADY been completed for project hbfwdnjrzlvsowtcfeuz:
+- Migration 20261015071852_add_waitlist_count applied.
+- waitlist-stats Edge Function deployed and returned a live count of 2 at verification.
+- Only count and updated_at are public. Names/emails remain private.
+
+Do not rerun either migration on this existing database. The source files are
+included for backup or a fresh installation. For a fresh project, apply both
+migrations in filename order before running supabase/verify_permissions.sql, then
+deploy both join-waitlist and waitlist-stats with the same server settings.
+
+After the Vercel deployment, refresh the home page and scroll to “A beginning,
+shared.” The number comes from Supabase. It refreshes every minute while the tab
+is visible, on returning to the tab, and after a successful submission. A short
+server cache can delay a new signup appearing by up to roughly 90 seconds. Duplicate
+signups do not increase the total. Loading/errors never show a fabricated number.
+The decorative ENSEMBLE text moves subtly as you scroll; reduced-motion disables it.
+
+Public names are not included: existing registrations did not consent to that.
+A future names feature needs separate explicit opt-in and a removable display name.
+
+The new frontend has passed 29 local tests and a production build. The live stats
+endpoint returns 200, and its direct anonymous database RPC returns 401. Actual
+browser layout/motion must be checked on Vercel after this update is deployed.
+
+---
+
 # Deploy ParlonsMoi to Vercel
 
 The existing Supabase database and join-waitlist function are ready. Keep them.

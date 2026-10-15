@@ -83,3 +83,22 @@ Historical private-site/pending-signup entries above are superseded by this upda
 - [x] HTML templates moved to src/pages; build refreshes both root and dist.
 - [x] Relative CSS/JS/font links validated: 38 references in each output tree.
 - [x] All 24 local tests and build passed after restructuring.
+
+## Live count update — 15 October 2026
+
+- [x] Preserve existing signup; add a count-only read endpoint.
+- [x] Apply 20261015071852_add_waitlist_count; no extra table grants or RLS changes.
+- [x] Deploy waitlist-stats v1; reuse server configuration, keep verify_jwt=true.
+- [x] Live endpoint returns only count and updated_at; verified real count 2.
+- [x] Direct anonymous RPC denied (401); server-only execution verified in SQL.
+- [x] Add editorial counter section with subtle parallax and reduced-motion support.
+- [x] Add zero/singular/loading/stale/error states, retry and automatic refresh.
+- [x] 29 local tests and production build passed.
+- [x] Keep root assets and dist in sync; full source included in updated ZIP.
+- [ ] Redeploy frontend to the existing Vercel project.
+- [ ] Check mobile/desktop layout and parallax in an actual browser.
+- [ ] Future optional public display names require separate consent and removal controls.
+
+Decision: public count counts stored registrations, not verified people or active
+platform users. It has no identity filters. No new submission or fake test row was
+created during this update. No registration names or emails were read.
